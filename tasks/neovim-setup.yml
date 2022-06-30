@@ -1,0 +1,48 @@
+- name: "Creating temporary directory"
+  tempfile:
+    state: "directory"
+    prefix: "neovim"
+  register: temp_dir
+  become: true
+  tags:
+    - install
+    - neovim
+
+- name: "Download NVIM source for version {{ nvim_version }}"
+  unarchive:
+    src: "https://github.com/neovim/neovim/archive/v{{ nvim_version }}.tar.gz"
+    dest: "{{ temp_dir.path }}"
+    remote_src: yes
+  become: true
+  tags:
+    - install
+    - neovim
+
+- name: "Run make with custom install path"
+  make:
+    chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
+    params:
+      CMAKE_EXTRA_FLAGS: "-DCMAKE_INSTALL_PREFIX={{ nvim_install_dest }}"
+  become: true
+  tags:
+    - install
+    - neovim
+
+- name: "Run make install"
+  make:
+    target: "install"
+    chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
+  become: true
+  tags:
+    - install
+    - neovim
+
+- name: "Removing Temp Directory {{ temp_dir.path }}"
+  file:
+    path: "{{ temp_dir.path }}"
+    state: "absent"
+  become: true
+  tags:
+    - install
+    - neovim
+

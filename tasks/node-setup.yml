@@ -1,0 +1,21 @@
+- name: Setup Node
+  block:
+    - name: Install nvm
+      shell: >
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ node_nvm_version }}/install.sh | bash
+      args:
+        executable: /bin/bash
+        chdir: "{{ my_home }}"
+        creates: "{{ my_home }}/.nvm/nvm.sh"
+    - name: Install node
+      shell: |
+        source {{ my_home }}/.nvm/nvm.sh
+        nvm install {{item}}
+      args:
+        executable: /bin/bash
+        chdir: "{{ my_home }}"
+        creates: "{{ my_home }}/.nvm/versions/node/v{{item}}"
+      loop: "{{ node_versions }}"
+  tags:
+    - install
+    - node

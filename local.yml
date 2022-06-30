@@ -1,0 +1,28 @@
+- hosts: localhost
+  vars: 
+    my_home: "{{ lookup('env', 'HOME') }}"
+
+    # neovim 
+    nvim_version: "0.7.2"
+    nvim_install_dest: "/usr/local"
+
+    # NodeJS
+    node_nvm_version: "0.39.1"
+    node_versions: 
+      - 18.4.0
+      - 16.15.1
+
+  pre_tasks:
+    - name: Update APT
+      become: true
+      apt:
+        force_apt_get: true
+        update_cache: true
+        state: present
+      tags:
+        - install
+        - core
+  tasks:
+    - include: tasks/core-setup.yml
+    - include: tasks/neovim-setup.yml
+    - include: tasks/node-setup.yml
