@@ -2,6 +2,9 @@
   vars: 
     my_home: "{{ lookup('env', 'HOME') }}"
 
+    # golang
+    golang_version: "1.18.3"
+
     # neovim 
     nvim_version: "0.7.2"
     nvim_install_dest: "/usr/local"
@@ -23,6 +26,8 @@
         - install
         - core
   tasks:
-    - include: tasks/core-setup.yml
-    - include: tasks/neovim-setup.yml
-    - include: tasks/node-setup.yml
+    - include_tasks: tasks/core-setup.yml
+    - include_tasks: tasks/neovim-setup.yml
+    - include_tasks: tasks/node-setup.yml
+    - include_tasks: tasks/go-setup.yml
+
