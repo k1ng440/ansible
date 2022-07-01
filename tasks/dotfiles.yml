@@ -1,0 +1,13 @@
+- name: Setup dotfiles
+  block:
+    - name: Git clone dotfiles
+      git:
+        repo: 'https://github.com/k1ng440/dotfiles.git'
+        dest: "{{ my_home }}/.dotfiles"
+
+    - name: Stow the dotfiles
+      shell: >
+        stow -d {{{ my_home }}/.dotfiles .
+      args:
+        executable: /bin/bash
+        chdir: "{{ my_home }}/.dotfiles"

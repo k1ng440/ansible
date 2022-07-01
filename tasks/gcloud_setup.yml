@@ -1,0 +1,40 @@
+- name: Setup Google Cloud SDK
+  tags:
+    - install
+    - gcloud
+  block:
+    - name: Add Gcloud package source
+      become: true
+      shell: >
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+              sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+      args:
+        executable: /bin/bash
+        creates: /etc/apt/sources.list.d/google-cloud-sdk.list
+
+    - name: Import public key for Gcloud
+      become: true
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        keyring: /usr/share/keyrings/cloud.google.gpg
+
+    - name: Update APT
+      become: true
+      apt:
+        force_apt_get: true
+        update_cache: true
+        state: present
+
+    - name: Install Gcloud 
+      become: true
+      apt: 
+        install_recommends: False
+        name: 
+          - google-cloud-cli
+
+    - name: install Gcloud extras 
+      become: true
+      apt: 
+        name: "{{ item }}"
+        state: latest
+      with_items: "{{ gcloud_extras }}"

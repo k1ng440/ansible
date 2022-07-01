@@ -15,6 +15,10 @@
       - 18.4.0
       - 16.15.1
 
+    # gcloud 
+    gcloud_extras:
+      - kubectl
+        
   pre_tasks:
     - name: Update APT
       become: true
@@ -27,9 +31,10 @@
         - core
   tasks:
     - import_tasks: tasks/core-setup.yml
+    - import_tasks: tasks/gcloud_setup.yml
     - import_tasks: tasks/zsh-setup.yml
     - import_tasks: tasks/neovim-setup.yml
     - import_tasks: tasks/node-setup.yml
     - import_tasks: tasks/npm-packages.yml
     - import_tasks: tasks/git-setup.yml
-
+    - import_tasks: tasks/dotfiles.yml
