@@ -1,0 +1,48 @@
+- name: Setup Go Packages
+  tags: 
+    - install
+    - go
+  block:
+    - name: Install gopls
+      command: >
+        go install golang.org/x/tools/gopls@latest
+
+    - name: Install delve
+      command: >
+        go install github.com/go-delve/delve/cmd/dlv@latest
+
+    - name: Install errcheck
+      command: >
+        go install github.com/kisielk/errcheck@latest
+
+    - name: Install goconst
+      command: >
+        go install github.com/jgautheron/goconst/cmd/goconst@latest
+    
+    - name: Install goimports
+      command: >
+        go install golang.org/x/tools/cmd/goimports@latest
+
+    - name: Install gotests
+      command: >
+        go install github.com/cweill/gotests/gotests@latest
+
+    - name: Install staticcheck
+      command: >
+         go install honnef.co/go/tools/cmd/staticcheck@latest
+
+    - name: Install goplay
+      command: >
+        go install github.com/haya14busa/goplay/cmd/goplay@latest
+
+    - name: Install gomodifytags
+      command: >
+        go install github.com/fatih/gomodifytags@latest
+
+    - name: Install lazygit
+      command: >
+        go install github.com/jesseduffield/lazygit@latest
+
+    - name: Install stern
+      command: >
+        go install github.com/stern/stern@latest

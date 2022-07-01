@@ -2,6 +2,7 @@
   tags:
     - install
     - node
+
   block:
     - name: Check current NVM version
       command: bash -c "source {{ my_home }}/.nvm/nvm.sh && nvm --version"
@@ -18,7 +19,7 @@
       register: version_changed
       ignore_errors: True
 
-    - name: "Removing temp directory"
+    - name: "Removing nvim.sh"
       file:
         path: "{{ my_home }}/.nvm/nvm.sh"
         state: "absent"
@@ -45,3 +46,5 @@
         chdir: "{{ my_home }}"
         creates: "{{ my_home }}/.nvm/versions/node/v{{item}}"
       loop: "{{ node_versions }}"
+
+

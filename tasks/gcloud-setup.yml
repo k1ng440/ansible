@@ -17,6 +17,7 @@
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         keyring: /usr/share/keyrings/cloud.google.gpg
+        state: present
 
     - name: Update APT
       become: true

@@ -1,35 +1,30 @@
-- name: Install Yarn
-  npm:
-    name: yarn
-    global: yes
+- name: Install NPM packages
   tags:
     - install
     - node
-- name: Install eslint
-  npm:
-    name: eslint
-    global: yes
-  tags:
-    - install
-    - node
-- name: Install Typescript server
-  npm:
-    name: typescript-language-server
-    global: yes
-  tags:
-    - install
-    - node
-- name: Install Typescript
-  npm:
-    name: typescript
-    global: yes
-  tags:
-    - install
-    - node
-- name: Install TS-Node
-  npm:
-    name: ts-node
-    global: yes
-  tags:
-    - install
-    - node
+
+  block: 
+    - name: Install Yarn
+      npm:
+        name: yarn
+        global: yes
+
+    - name: Install eslint
+      npm:
+        name: eslint
+        global: yes
+
+    - name: Install Typescript server
+      npm:
+        name: typescript-language-server
+        global: yes
+
+    - name: Install Typescript
+      npm:
+        name: typescript
+        global: yes
+
+    - name: Install TS-Node
+      npm:
+        name: ts-node
+        global: yes

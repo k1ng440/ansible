@@ -2,6 +2,7 @@
   tags:
     - install
     - core
+
   block:
     - name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
       become: true
@@ -21,7 +22,7 @@
     - name: Install System Packages 4
       become: true
       apt:
-        name: ["apt-transport-https", "ca-certificates", "gnupg"]
+        name: ["apt-transport-https", "ca-certificates", "gnupg", "jq"]
 
     - name: Install Clang
       become: true

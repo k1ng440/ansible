@@ -29,4 +29,3 @@
         repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
         dest: "{{ my_home }}/.oh-my-zsh/plugins/zsh-autosuggestions"
 
-

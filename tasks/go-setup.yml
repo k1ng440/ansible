@@ -16,7 +16,7 @@
       fail: msg="Version already exists"
       when: current_golang_version.stdout != "" and current_golang_version.stdout is version(golang_version, operator='ge', strict=True)
       register: version_changed
-      ignore_errors: True
+      ignore_errors: true
 
     - name: Remove old installation of Go
       file:

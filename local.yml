@@ -29,12 +29,16 @@
       tags:
         - install
         - core
+
   tasks:
     - import_tasks: tasks/core-setup.yml
-    - import_tasks: tasks/gcloud_setup.yml
+    - import_tasks: tasks/gcloud-setup.yml
     - import_tasks: tasks/zsh-setup.yml
     - import_tasks: tasks/neovim-setup.yml
     - import_tasks: tasks/node-setup.yml
     - import_tasks: tasks/npm-packages.yml
     - import_tasks: tasks/git-setup.yml
     - import_tasks: tasks/dotfiles.yml
+    - import_tasks: tasks/go-packages.yml
+    - import_tasks: tasks/rust-setup.yml
+    - import_tasks: tasks/awscli-setup.yml

@@ -1,0 +1,29 @@
+- name: Install AWS CLI
+  tags: [install, aws]
+  block:
+    - name: Create temp directory
+      tempfile:
+        state: directory
+        suffix: awscli
+      register: tmp_dir
+
+    - name: Download AWS CLI
+      unarchive:
+        src: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "{{ tmp_dir.path }}"
+        remote_src: true
+      register: aws_cli_unarchive_installer
+
+    - name: Install awscli package.
+      become: true
+      shell: > 
+        {{ tmp_dir.path }}/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+      args:
+        creates: /usr/bin/aws
+      when: aws_cli_unarchive_installer.changed
+
+    - name: Delete temp directory
+      file: 
+        path: "{{ tmp_dir.path }}"
+        state: absent
+
