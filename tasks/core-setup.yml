@@ -1,31 +1,25 @@
-- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
-  become: true
-  apt:
-    name: ["build-essential", "cmake", "pkg-config", "libpthread-stubs0-dev"]
+- name: Install APT Packages
   tags:
     - install
     - core
+  block:
+    - name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
+      become: true
+      apt:
+        name: ["build-essential", "cmake", "pkg-config", "libpthread-stubs0-dev"]
 
-- name: Install System Packages 2 (lua, unzip, libtool, libtool-bin, gettext)
-  become: true
-  apt:
-    name: ["lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
-  tags:
-    - install
-    - core
+    - name: Install System Packages 2 (lua, unzip, libtool, libtool-bin, gettext)
+      become: true
+      apt:
+        name: ["lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
 
-- name: Install System Packages 3 
-  become: true
-  apt:
-    name: ["git", "curl", "htop", "lsof", "ccache", "ninja-build", "python3-pip", "moreutils", "clangd"]
-  tags:
-    - install
-    - core
+    - name: Install System Packages 3 
+      become: true
+      apt:
+        name: ["git", "curl", "htop", "lsof", "ccache", "ninja-build", "python3-pip", "moreutils", "clangd", "stow"]
 
-- name: Install Clang
-  become: true
-  apt:
-    name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12"]
-  tags:
-    - install
-    - core
+    - name: Install Clang
+      become: true
+      apt:
+        name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12"]
+

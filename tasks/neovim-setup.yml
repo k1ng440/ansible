@@ -1,48 +1,58 @@
-- name: "Creating temporary directory"
-  tempfile:
-    state: "directory"
-    prefix: "neovim"
-  register: temp_dir
-  become: true
+- name: Setup Neovim
   tags:
     - install
     - neovim
+  block:
+    - name: Check current neovim version
+      command: bash -c "nvim --version | sed -e 's/NVIM v//g'| cut -d ' ' -f1 | head -n 1"
+      ignore_errors: true
+      register: current_nvim_version
+      changed_when: false
 
-- name: "Download NVIM source for version {{ nvim_version }}"
-  unarchive:
-    src: "https://github.com/neovim/neovim/archive/v{{ nvim_version }}.tar.gz"
-    dest: "{{ temp_dir.path }}"
-    remote_src: yes
-  become: true
-  tags:
-    - install
-    - neovim
+    - debug: msg="current_nvim_version={{ current_nvim_version.stdout }}"
+    - debug: msg="nvim_version={{ nvim_version }}"
 
-- name: "Run make with custom install path"
-  make:
-    chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
-    params:
-      CMAKE_EXTRA_FLAGS: "-DCMAKE_INSTALL_PREFIX={{ nvim_install_dest }}"
-  become: true
-  tags:
-    - install
-    - neovim
+    - name: Continue only when version is older
+      fail: msg="Version already exists"
+      when: current_nvim_version.stdout != "" and current_nvim_version.stdout is version(nvim_version, operator='ge', strict=True)
+      register: version_changed
+      ignore_errors: True
 
-- name: "Run make install"
-  make:
-    target: "install"
-    chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
-  become: true
-  tags:
-    - install
-    - neovim
+    - name: "Creating temp directory"
+      tempfile:
+        state: "directory"
+        prefix: "neovim"
+      register: temp_dir
+      become: true
+      when: version_changed is succeeded
 
-- name: "Removing Temp Directory {{ temp_dir.path }}"
-  file:
-    path: "{{ temp_dir.path }}"
-    state: "absent"
-  become: true
-  tags:
-    - install
-    - neovim
+    - name: "Download NVIM source for version {{ nvim_version }}"
+      unarchive:
+        src: "https://github.com/neovim/neovim/archive/v{{ nvim_version }}.tar.gz"
+        dest: "{{ temp_dir.path }}"
+        remote_src: true
+      become: true
+      when: version_changed is succeeded
+
+    - name: "Run make with custom install path"
+      make:
+        chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
+        params:
+          CMAKE_EXTRA_FLAGS: "-DCMAKE_INSTALL_PREFIX={{ nvim_install_dest }}"
+      become: true
+      when: version_changed is succeeded
+
+    - name: "Run make install"
+      make:
+        target: "install"
+        chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
+      become: true
+      when: version_changed is succeeded
+
+    - name: "Removing temp directory"
+      file:
+        path: "{{ temp_dir.path }}"
+        state: "absent"
+      become: true
+      when: version_changed is succeeded
 

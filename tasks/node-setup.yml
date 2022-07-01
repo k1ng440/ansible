@@ -1,5 +1,30 @@
 - name: Setup Node
+  tags:
+    - install
+    - node
   block:
+    - name: Check current NVM version
+      command: bash -c "source {{ my_home }}/.nvm/nvm.sh && nvm --version"
+      ignore_errors: true
+      register: current_nvm_version
+      changed_when: false
+
+    - debug: msg="current_nvm_version={{ current_nvm_version.stdout }}"
+    - debug: msg="node_nvm_version={{ node_nvm_version }}"
+
+    - name: Continue only when NVM is older
+      fail: msg="NVM v{{ node_nvm_version }} is already installed"
+      when: current_nvm_version.stdout != "" and current_nvm_version.stdout is version(node_nvm_version, operator='ge', strict=True)
+      register: version_changed
+      ignore_errors: True
+
+    - name: "Removing temp directory"
+      file:
+        path: "{{ my_home }}/.nvm/nvm.sh"
+        state: "absent"
+      become: true
+      when: version_changed is succeeded
+        
     - name: Install nvm
       shell: >
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ node_nvm_version }}/install.sh | bash
@@ -7,15 +32,16 @@
         executable: /bin/bash
         chdir: "{{ my_home }}"
         creates: "{{ my_home }}/.nvm/nvm.sh"
+      when: version_changed is succeeded
+        
     - name: Install node
-      shell: |
+      shell: >
+        export NVM_DIR="{{ my_home }}/.nvm"
         source {{ my_home }}/.nvm/nvm.sh
-        nvm install {{item}}
+        nvm install {{ item }}
+        nvm use {{ item }}
       args:
         executable: /bin/bash
         chdir: "{{ my_home }}"
         creates: "{{ my_home }}/.nvm/versions/node/v{{item}}"
       loop: "{{ node_versions }}"
-  tags:
-    - install
-    - node

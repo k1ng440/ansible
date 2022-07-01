@@ -26,8 +26,10 @@
         - install
         - core
   tasks:
-    - include_tasks: tasks/core-setup.yml
-    - include_tasks: tasks/neovim-setup.yml
-    - include_tasks: tasks/node-setup.yml
-    - include_tasks: tasks/go-setup.yml
+    - import_tasks: tasks/core-setup.yml
+    - import_tasks: tasks/zsh-setup.yml
+    - import_tasks: tasks/neovim-setup.yml
+    - import_tasks: tasks/node-setup.yml
+    - import_tasks: tasks/npm-packages.yml
+    - import_tasks: tasks/git-setup.yml
 

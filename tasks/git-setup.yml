@@ -1,0 +1,16 @@
+- name: Setup Git personal
+  tags:
+      - git-personal
+
+  block:
+    - name: Git personal setup email
+      git_config:
+        name: user.email
+        scope: global
+        value: "contact@iampavel.dev"
+
+    - name: Git personal setup name
+      git_config:
+        name: user.name
+        scope: global
+        value: "Asaduzzaman Pavel"
