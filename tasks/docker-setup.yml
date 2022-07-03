@@ -1,0 +1,16 @@
+- name: Setup Docker
+  tags:
+    - install
+    - docker
+  block:
+    - name: Create ~/.local/bin
+      file:
+        path: "{{ my_home }}/.local/bin"
+        state: directory
+        mode: 0775
+
+    - name: Download docker-compose standalone
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-x86_64"
+        dest: "{{ my_home }}/.local/bin/docker-compose"
+        mode: 0700

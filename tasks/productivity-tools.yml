@@ -1,0 +1,31 @@
+- name: Install productivity tools
+  tags: 
+    - install 
+    - productivity
+  block:
+    - name: Install ripgrep
+      become: true
+      apt: name=ripgrep
+
+    # HACK: https://github.com/sharkdp/bat/issues/938#issuecomment-759415389
+    - name: Check that the ripgrep.list exists
+      stat:
+         path: "/var/lib/dpkg/info/ripgrep.list"
+      register: stat_result
+
+    - name: Bat workaround
+      become: true
+      shell: >
+        sed -i '/\/usr\/.crates2.json/d' /var/lib/dpkg/info/ripgrep.list
+      when: stat_result.stat.exists
+
+    - name: Install packages
+      become: true
+      apt:
+        name: ["bat", "tmux", "fzf", "tldr", "jq", "stow", "ripgrep"]
+
+    - name: Install tmux plugin manager
+      git:
+        repo: "https://github.com/tmux-plugins/tpm.git"
+        dest: "{{ my_home }}/.tmux/plugins/tpm"
+

@@ -5,6 +5,7 @@
 
   block: 
     - name: Install ZSH
+      become: true
       apt: 
         name: zsh
 
@@ -24,8 +25,15 @@
         {{ my_home }}/.oh-my-installer
       when: oh_my_zsh.stat.exists == False
 
-    - name: Install zsh-autosuggestions
+    - name: Git clone zsh-autosuggestions
       git:
         repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
         dest: "{{ my_home }}/.oh-my-zsh/plugins/zsh-autosuggestions"
+        depth: 1
+
+    - name: Git clone powerlevel10k
+      git:
+        repo: 'https://gitee.com/romkatv/powerlevel10k.git'
+        dest: "{{ my_home }}/.oh-my-zsh/custom/themes/powerlevel10k"
+        depth: 1
 

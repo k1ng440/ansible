@@ -2,18 +2,28 @@
   vars: 
     my_home: "{{ lookup('env', 'HOME') }}"
 
-    # golang
+    # Golang
     golang_version: "1.18.3"
 
-    # neovim 
+    # Neovim 
     nvim_version: "0.7.2"
     nvim_install_dest: "/usr/local"
+
+    # Docker
+    docker_compose_version: "2.6.1"
 
     # NodeJS
     node_nvm_version: "0.39.1"
     node_versions: 
       - 18.4.0
       - 16.15.1
+    npm_packages:
+      - yarn
+      - yo
+      - typescript
+      - ts-node
+      - nodemon
+      - eslint
 
     # gcloud 
     gcloud_extras:
@@ -32,13 +42,16 @@
 
   tasks:
     - import_tasks: tasks/core-setup.yml
+    - import_tasks: tasks/productivity-tools.yml
     - import_tasks: tasks/gcloud-setup.yml
     - import_tasks: tasks/zsh-setup.yml
+    - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/neovim-setup.yml
+    - import_tasks: tasks/go-setup.yml
+    - import_tasks: tasks/go-packages.yml
     - import_tasks: tasks/node-setup.yml
     - import_tasks: tasks/npm-packages.yml
     - import_tasks: tasks/git-setup.yml
-    - import_tasks: tasks/dotfiles.yml
-    - import_tasks: tasks/go-packages.yml
     - import_tasks: tasks/rust-setup.yml
     - import_tasks: tasks/awscli-setup.yml
+    - import_tasks: tasks/docker-setup.yml

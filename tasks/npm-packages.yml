@@ -4,27 +4,16 @@
     - node
 
   block: 
-    - name: Install Yarn
-      npm:
-        name: yarn
-        global: yes
+    - name: Get NodeJs version
+      command: bash -c "source {{ my_home }}/.nvm/nvm.sh && nvm current"
+      ignore_errors: true
+      register: current_node
 
-    - name: Install eslint
+    - name: Install global NPM packages
       npm:
-        name: eslint
-        global: yes
+        name: "{{ item }}"
+        global: true
+      loop: "{{ npm_packages }}"
+      environment:
+        PATH: "{{ my_home }}/.nvm/versions/node/{{ current_node.stdout }}/bin:{{ ansible_env.PATH }}"
 
-    - name: Install Typescript server
-      npm:
-        name: typescript-language-server
-        global: yes
-
-    - name: Install Typescript
-      npm:
-        name: typescript
-        global: yes
-
-    - name: Install TS-Node
-      npm:
-        name: ts-node
-        global: yes

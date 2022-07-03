@@ -8,9 +8,16 @@
         repo: 'https://github.com/k1ng440/dotfiles.git'
         dest: "{{ my_home }}/.dotfiles"
 
+    - name: Remove originals files if exists
+      shell: >
+        [ -f {{ my_home }}/.zshrc ] && rm {{ my_home }}/.zshrc || true
+        [ -f {{ my_home }}/.profile ] && rm {{ my_home }}/.profile || true
+      args:
+        executable: /bin/bash
+
     - name: Stow the dotfiles
       shell: >
-        stow -d {{ my_home }}/.dotfiles .
+        stow -v .
       args:
         executable: /bin/bash
         chdir: "{{ my_home }}/.dotfiles"

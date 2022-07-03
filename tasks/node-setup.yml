@@ -19,7 +19,7 @@
       register: version_changed
       ignore_errors: True
 
-    - name: "Removing nvim.sh"
+    - name: "Removing existing nvim.sh"
       file:
         path: "{{ my_home }}/.nvm/nvm.sh"
         state: "absent"
@@ -30,19 +30,18 @@
       shell: >
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ node_nvm_version }}/install.sh | bash
       args:
-        executable: /bin/bash
+        executable: /bin/zsh
         chdir: "{{ my_home }}"
         creates: "{{ my_home }}/.nvm/nvm.sh"
       when: version_changed is succeeded
         
     - name: Install node
-      shell: >
-        export NVM_DIR="{{ my_home }}/.nvm"
-        source {{ my_home }}/.nvm/nvm.sh
+      shell: |
+        source {{ my_home }}/.zshrc
         nvm install {{ item }}
         nvm use {{ item }}
       args:
-        executable: /bin/bash
+        executable: /bin/zsh
         chdir: "{{ my_home }}"
         creates: "{{ my_home }}/.nvm/versions/node/v{{item}}"
       loop: "{{ node_versions }}"
