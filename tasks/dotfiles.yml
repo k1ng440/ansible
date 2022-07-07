@@ -9,7 +9,7 @@
         dest: "{{ my_home }}/.dotfiles"
 
     - name: Remove originals files if exists
-      shell: >
+      shell: |
         [ -f {{ my_home }}/.zshrc ] && rm {{ my_home }}/.zshrc || true
         [ -f {{ my_home }}/.profile ] && rm {{ my_home }}/.profile || true
       args:

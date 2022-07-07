@@ -13,7 +13,7 @@
       npm:
         name: "{{ item }}"
         global: true
-      loop: "{{ npm_packages }}"
+      loop: "{{ node_global_packages }}"
       environment:
         PATH: "{{ my_home }}/.nvm/versions/node/{{ current_node.stdout }}/bin:{{ ansible_env.PATH }}"
 

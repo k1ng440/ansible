@@ -1,8 +1,11 @@
 # Ansible
-This Ansible playbook is for personal machine setup. Use at your own risk.
+This Ansible playbook is for setting up workstation machine. Use at your own risk.
 
 ## Fresh Installation
-installs essentials and pull this repo using `ansible-pull`
+Just run
 `wget -O - https://raw.githubusercontent.com/k1ng440/ansible/master/install.sh | bash`
 
 
+## TODO 
+- Write tests using Ansible Molecule
+- Write Ansible for windows

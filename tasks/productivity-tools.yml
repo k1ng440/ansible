@@ -7,7 +7,7 @@
       become: true
       apt: name=ripgrep
 
-    # HACK: https://github.com/sharkdp/bat/issues/938#issuecomment-759415389
+      #HACK: https://github.com/sharkdp/bat/issues/938#issuecomment-759415389
     - name: Check that the ripgrep.list exists
       stat:
          path: "/var/lib/dpkg/info/ripgrep.list"
@@ -22,10 +22,5 @@
     - name: Install packages
       become: true
       apt:
-        name: ["bat", "tmux", "fzf", "tldr", "jq", "stow", "ripgrep"]
-
-    - name: Install tmux plugin manager
-      git:
-        repo: "https://github.com/tmux-plugins/tpm.git"
-        dest: "{{ my_home }}/.tmux/plugins/tpm"
+        name: ["bat", "fzf", "tldr", "jq", "stow", "ripgrep"]
 

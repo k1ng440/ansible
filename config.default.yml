@@ -1,0 +1,34 @@
+
+# Home directory 
+my_home: "{{ lookup('env', 'HOME') }}"
+
+# Golang
+golang_install: true
+golang_version: "1.18.3"
+
+# Neovim 
+nvim_version: "0.7.2"
+nvim_install_dest: "/usr/local"
+
+# Docker
+docker_compose_version: "2.6.1"
+
+# NodeJS
+node_nvm_version: "0.39.1"
+node_versions: 
+  - 18.4.0
+  - 16.15.1
+
+node_global_packages:
+  - yarn
+  - yo
+  - typescript
+  - ts-node
+  - nodemon
+  - eslint
+
+tmux_version: "3.3a"
+
+# gcloud 
+gcloud_extras:
+  - kubectl

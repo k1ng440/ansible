@@ -4,69 +4,79 @@
     - go
   block:
     - name: Install gopls
-      shell: >
+      shell: |
         source {{ my_home }}/.zshrc 
         go install golang.org/x/tools/gopls@latest
       args:
         executable: /bin/zsh
 
     - name: Install delve
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/go-delve/delve/cmd/dlv@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/go-delve/delve/cmd/dlv@latest
       args:
         executable: /bin/zsh
 
     - name: Install errcheck
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/kisielk/errcheck@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/kisielk/errcheck@latest
       args:
         executable: /bin/zsh
 
     - name: Install goconst
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/jgautheron/goconst/cmd/goconst@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/jgautheron/goconst/cmd/goconst@latest
       args:
         executable: /bin/zsh
     
     - name: Install goimports
-      shell: >
-        source {{ my_home }}/.zshrc && go install golang.org/x/tools/cmd/goimports@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install golang.org/x/tools/cmd/goimports@latest
       args:
         executable: /bin/zsh
 
     - name: Install gotests
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/cweill/gotests/gotests@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/cweill/gotests/gotests@latest
       args:
         executable: /bin/zsh
 
     - name: Install staticcheck
-      shell: >
-        source {{ my_home }}/.zshrc &&  go install honnef.co/go/tools/cmd/staticcheck@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+         go install honnef.co/go/tools/cmd/staticcheck@latest
       args:
         executable: /bin/zsh
 
     - name: Install goplay
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/haya14busa/goplay/cmd/goplay@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/haya14busa/goplay/cmd/goplay@latest
       args:
         executable: /bin/zsh
 
     - name: Install gomodifytags
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/fatih/gomodifytags@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/fatih/gomodifytags@latest
       args:
         executable: /bin/zsh
 
     - name: Install lazygit
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/jesseduffield/lazygit@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/jesseduffield/lazygit@latest
       args:
         executable: /bin/zsh
 
     - name: Install stern
-      shell: >
-        source {{ my_home }}/.zshrc && go install github.com/stern/stern@latest
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go install github.com/stern/stern@latest
       args:
         executable: /bin/zsh
 
@@ -77,8 +87,9 @@
       register: mage_clone
 
     - name: Compile Mage
-      shell: >
-        source {{ my_home }}/.zshrc && go run bootstrap.go
+      shell: |
+        source {{ my_home }}/.zshrc 
+        go run bootstrap.go
       args:
         chdir: /tmp/mage
         executable: /bin/zsh

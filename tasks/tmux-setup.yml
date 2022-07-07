@@ -1,0 +1,51 @@
+- name: Setup tmux
+  tags: 
+    - install
+    - tmux
+
+  block:
+    - name: Check tmux version
+      command: bash -c "tmux -V | sed -e 's/tmux //g'"
+      ignore_errors: true
+      register: current_tmux_version
+      changed_when: false
+
+    - name: Continue only when tmux is older
+      fail: msg="Version already exists"
+      when: current_tmux_version.stdout != "" and current_tmux_version.stdout is version(tmux_version, operator='ge', strict=false)
+      register: version_changed
+      ignore_errors: true
+
+    - name: Create temp directory
+      tempfile:
+        state: directory
+        suffix: tmux
+      register: tmp_dir
+      when: version_changed is succeeded
+
+    - name: "Download tmux {{ tmux_version }}"
+      unarchive:
+        src: "https://github.com/tmux/tmux/releases/download/{{ tmux_version }}/tmux-{{ tmux_version }}.tar.gz"
+        dest: "{{ tmp_dir.path }}"
+        remote_src: true
+      when: version_changed is succeeded
+
+    - name: "Configure tmux {{ tmux_version }}"
+      shell: |
+        ./configure
+        make && sudo make install
+      args:
+        chdir: "{{ tmp_dir.path }}/tmux-{{ tmux_version }}"
+      when: version_changed is succeeded
+
+    - name: Install tmux plugin manager
+      git:
+        repo: "https://github.com/tmux-plugins/tpm.git"
+        dest: "{{ my_home }}/.tmux/plugins/tpm"
+
+    - name: Delete temp directory
+      file: 
+        path: "{{ tmp_dir.path }}"
+        state: absent
+      when: tmp_dir.path is defined
+

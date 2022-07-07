@@ -22,5 +22,5 @@
     - name: Install System Packages 4
       become: true
       apt:
-        name: ["apt-transport-https", "ca-certificates", "gnupg", "rsync"]
+        name: ["apt-transport-https", "ca-certificates", "gnupg", "rsync", "libevent-dev", "ncurses-dev", "openssl", "libssl-dev"]
 
