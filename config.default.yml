@@ -2,6 +2,14 @@
 # Home directory 
 my_home: "{{ lookup('env', 'HOME') }}"
 
+# SSH
+ssh_dest_dir: "{{ lookup('env', 'HOME') }}/.ssh"
+ssh_files: 
+  - id_rsa
+ssh_known_hosts: 
+  - github.com
+ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
+
 # Golang
 golang_install: true
 golang_version: "1.18.3"
@@ -32,3 +40,5 @@ tmux_version: "3.3a"
 # gcloud 
 gcloud_extras:
   - kubectl
+  - google-cloud-sdk-gke-gcloud-auth-plugin
+

@@ -22,8 +22,3 @@
         creates: /usr/bin/aws
       when: aws_cli_unarchive_installer.changed
 
-    - name: Delete temp directory
-      file: 
-        path: "{{ tmp_dir.path }}"
-        state: absent
-

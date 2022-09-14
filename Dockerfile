@@ -18,6 +18,7 @@ USER k1ng
 WORKDIR /home/k1ng/ansible
 
 FROM base
+WORKDIR /home/k1ng/ansible
 ENV PLAYBOOK_TAGS=${PLAYBOOK_TAGS}
 COPY . .
 CMD ["sh", "-c", "ansible-playbook ${PLAYBOOK_TAGS} playbook.yml"]

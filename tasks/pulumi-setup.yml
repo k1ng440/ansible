@@ -1,0 +1,15 @@
+- name: Pulumi Setup
+  tags: 
+    - install
+    - pulumi
+  block:
+    - name: Download Pulumi installer
+      get_url: 
+        url: "https://get.pulumi.com/"
+        dest: "/tmp/pulumi-installer.sh"
+        mode: "0755"
+    - name: Run Pulumi installer
+      shell: "sh /tmp/pulumi-installer.sh"
+
+    - name: Verify installer
+      shell: "command -v pulumi"

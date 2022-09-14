@@ -17,7 +17,7 @@
     - name: Install System Packages 3 
       become: true
       apt:
-        name: ["git", "curl", "htop", "lsof", "ccache", "ninja-build", "python3-pip", "moreutils", "clangd"]
+        name: ["git", "curl", "htop", "lsof", "ccache", "ninja-build", "python3-pip", "moreutils", "clangd", "dnsutils", "nano"]
 
     - name: Install System Packages 4
       become: true

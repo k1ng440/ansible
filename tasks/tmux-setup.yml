@@ -2,7 +2,6 @@
   tags: 
     - install
     - tmux
-
   block:
     - name: Check tmux version
       command: bash -c "tmux -V | sed -e 's/tmux //g'"
@@ -33,19 +32,14 @@
     - name: "Configure tmux {{ tmux_version }}"
       shell: |
         ./configure
-        make && sudo make install
+        make && make install
       args:
         chdir: "{{ tmp_dir.path }}/tmux-{{ tmux_version }}"
       when: version_changed is succeeded
+      become: true
 
     - name: Install tmux plugin manager
       git:
         repo: "https://github.com/tmux-plugins/tpm.git"
         dest: "{{ my_home }}/.tmux/plugins/tpm"
-
-    - name: Delete temp directory
-      file: 
-        path: "{{ tmp_dir.path }}"
-        state: absent
-      when: tmp_dir.path is defined
 

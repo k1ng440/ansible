@@ -1,0 +1,9 @@
+- name: Setup PHP 
+  tags: 
+    - install
+    - php
+  block:
+    - name: Install PHP 7
+      become: true
+      apt:
+        name: ["php7.4"]

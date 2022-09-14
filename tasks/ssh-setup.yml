@@ -1,0 +1,38 @@
+- name: Setup SSH key
+  tags: 
+    - dotfiles
+    - ssh
+  block:
+    - name: Ensure .ssh dir exists
+      file:
+        dest: "{{ ssh_dest_dir }}"
+        mode: 0700
+        state: directory
+
+    - name: Copy ssh private key(s)
+      ansible.builtin.copy:
+        src: "./ssh/{{ item }}"
+        dest: "{{ ssh_dest_dir }}/{{ item }}"
+        mode: 0600
+      loop: "{{ ssh_files }}"
+
+    - name: Copy ssh public key(s)
+      ansible.builtin.copy:
+        src: "./ssh/{{ item }}.pub"
+        dest: "{{ ssh_dest_dir }}/{{ item }}.pub"
+        mode: 0600
+      loop: "{{ ssh_files }}"
+
+    - name: For each host, scan for its ssh public key
+      shell: "ssh-keyscan {{ item }},`dig +short {{ item }}`"
+      with_items: "{{ ssh_known_hosts }}"
+      register: ssh_known_host_results
+      ignore_errors: true
+
+    - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
+      known_hosts:
+        name: "{{ item.item }}"
+        key: "{{ item.stdout }}"
+        path: "{{ ssh_known_hosts_file }}"
+      with_items: "{{ ssh_known_host_results.results }}"
+
