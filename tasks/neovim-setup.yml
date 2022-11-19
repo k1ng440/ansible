@@ -38,7 +38,7 @@
       make:
         chdir: "{{ temp_dir.path }}/neovim-{{ nvim_version }}"
         params:
-          CMAKE_EXTRA_FLAGS: "-DCMAKE_INSTALL_PREFIX={{ nvim_install_dest }}"
+          CMAKE_EXTRA_FLAGS: "-DCMAKE_INSTALL_PREFIX={{ nvim_install_dest }} -DCMAKE_BUILD_TYPE=RelWithDebInfo"
       become: true
       when: version_changed is succeeded
 
