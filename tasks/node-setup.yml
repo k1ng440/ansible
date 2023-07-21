@@ -5,6 +5,7 @@
 
   block:
     - name: Check current NVM version
+      become: false
       command: bash -c "source {{ my_home }}/.nvm/nvm.sh && nvm --version"
       ignore_errors: true
       register: current_nvm_version
@@ -14,19 +15,28 @@
     - debug: msg="node_nvm_version={{ node_nvm_version }}"
 
     - name: Continue only when NVM is older
+      become: false
       fail: msg="NVM v{{ node_nvm_version }} is already installed"
       when: current_nvm_version.stdout != "" and current_nvm_version.stdout is version(node_nvm_version, operator='ge', strict=True)
       register: version_changed
-      ignore_errors: True
+      ignore_errors: true
 
     - name: "Removing existing nvim.sh"
+      become: false
       file:
         path: "{{ my_home }}/.nvm/nvm.sh"
         state: "absent"
       become: true
       when: version_changed is succeeded
-        
+
+    - name: "Create directory"
+      become: false
+      file:
+        path: "{{ my_home }}/.nvm"
+        state: "directory"
+
     - name: Install nvm
+      become: false
       shell: >
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ node_nvm_version }}/install.sh | bash
       args:
@@ -36,6 +46,7 @@
       when: version_changed is succeeded
         
     - name: Install node
+      become: false
       shell: |
         source {{ my_home }}/.zshrc
         nvm install {{ item }}

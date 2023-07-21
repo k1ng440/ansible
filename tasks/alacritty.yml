@@ -1,0 +1,65 @@
+- name: Install Alacritty
+  tags:
+    - install
+    - alacritty
+  block:
+    - name: ensure cargo
+      command: "{{ my_home }}/.cargo/bin/cargo --version"
+      changed_when: false
+
+    - name: ensure prereqs
+      apt:
+        name:
+          - cmake
+          - pkg-config
+          - libfreetype6-dev
+          - libfontconfig1-dev
+          - libxcb-xfixes0-dev
+          - libxkbcommon-dev
+          - python3
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Git clone alacritty
+      become: false
+      git:
+        repo: 'https://github.com/alacritty/alacritty.git'
+        dest: "/tmp/alacritty"
+        depth: 1
+
+    - name: Run build
+      become: false
+      command:
+        chdir: "/tmp/alacritty"
+        cmd: cargo build --release
+
+    - name: Copy bin
+      become: true
+      command:
+        chdir: "/tmp/alacritty"
+        cmd: |
+          cp target/release/alacritty /usr/local/bin 
+
+    - name: Check Terminfo
+      become: true
+      command: infocmp alacritty
+      ignore_errors: true
+      register: terminfo
+
+    - name: Set Terminfo
+      become: true
+      command: 
+        chdir: "/tmp/alacritty"
+        cmd: tic -xe alacritty,alacritty-direct extra/alacritty.info
+      when: terminfo is failed
+
+    - name: Add desktop entry
+      become: true
+      shell:
+        chdir: "/tmp/alacritty"
+        cmd: | 
+          cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
+          cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+          desktop-file-install extra/linux/Alacritty.desktop
+          update-desktop-database

@@ -1,0 +1,26 @@
+---
+- name: Nix Packages
+  tags:
+    - nix_packages
+    - nixpackages
+  block:
+    # - name: Add Nix channels
+    #   loop: '{{ nix_channels }}'
+    #   command: >-
+    #     nix-channel --add {{ item.url|quote }} {{ item.name|quote }}
+    #   changed_when: false
+
+    # - name: Update Nix channels
+    #   command: >-
+    #     nix-channel --update
+    #   retries: 5
+    #   delay: 1
+    #   register: nix_channels_update
+    #   until: nix_channels_update.rc == 0
+
+    - name: Log Nix packages to be installed
+      debug:
+        var: nix_packages
+
+    - name: Install Nix packages
+      command: /etc/nix-env --install --attr {{ nix_packages|join(' ') }}

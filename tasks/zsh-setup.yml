@@ -10,15 +10,17 @@
         name: zsh
 
     - name: Change shell to zsh
-      shell: chsh -s $(which zsh)
       become: true
+      shell: chsh -s $(which zsh)
 
     - name: Check if oh-my-zsh exists
+      become: false
       stat:
         path: "{{ my_home }}/.oh-my-zsh"
       register: oh_my_zsh
 
     - name: Oh-My-Zsh
+      become: false
       shell: >
         curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > {{ my_home }}/.oh-my-installer && \ 
         chmod +x {{ my_home }}/.oh-my-installer && \
@@ -26,12 +28,14 @@
       when: oh_my_zsh.stat.exists == False
 
     - name: Git clone zsh-autosuggestions
+      become: false
       git:
         repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
         dest: "{{ my_home }}/.oh-my-zsh/plugins/zsh-autosuggestions"
         depth: 1
 
     - name: Git clone powerlevel10k
+      become: false
       git:
         repo: 'https://gitee.com/romkatv/powerlevel10k.git'
         dest: "{{ my_home }}/.oh-my-zsh/custom/themes/powerlevel10k"

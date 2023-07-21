@@ -79,19 +79,3 @@
         go install github.com/stern/stern@latest
       args:
         executable: /bin/zsh
-
-    - name: Git clone Mage
-      git:
-        repo: 'https://github.com/magefile/mage.git'
-        dest: "/tmp/mage"
-      register: mage_clone
-
-    - name: Compile Mage
-      shell: |
-        source {{ my_home }}/.zshrc 
-        go run bootstrap.go
-      args:
-        chdir: /tmp/mage
-        executable: /bin/zsh
-      when: mage_clone.changed
-

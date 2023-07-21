@@ -9,3 +9,5 @@ Just run
 ## TODO 
 - Write tests using Ansible Molecule
 - Write Ansible for windows
+Fix https://www.hashicorp.com/blog/announcing-the-hashicorp-linux-repository
+Fix Fresh Installation instruction

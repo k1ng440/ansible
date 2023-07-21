@@ -4,12 +4,14 @@
     - tmux
   block:
     - name: Check tmux version
+      become: true
       command: bash -c "tmux -V | sed -e 's/tmux //g'"
       ignore_errors: true
       register: current_tmux_version
       changed_when: false
 
     - name: Continue only when tmux is older
+      become: true
       fail: msg="Version already exists"
       when: current_tmux_version.stdout != "" and current_tmux_version.stdout is version(tmux_version, operator='ge', strict=false)
       register: version_changed
@@ -39,6 +41,7 @@
       become: true
 
     - name: Install tmux plugin manager
+      become: false
       git:
         repo: "https://github.com/tmux-plugins/tpm.git"
         dest: "{{ my_home }}/.tmux/plugins/tpm"
