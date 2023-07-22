@@ -1,7 +1,7 @@
 - hosts: localhost
-  vars_files: 
+  vars_files:
     - config.default.yml
-        
+
   pre_tasks:
     - name: Include playbook configuration.
       include_vars: "{{ item }}"

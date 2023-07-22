@@ -3,7 +3,6 @@
   tags:
     - cargo
     - rust
-    - alacritty
   block:
   - name: Check for cargo-update
     command: which cargo-install-update
@@ -52,3 +51,5 @@
       --all
       {{ cargo_packages|rejectattr('git', 'defined')|join(' ') }}
     register: cargo_update
+
+

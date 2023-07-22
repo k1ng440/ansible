@@ -1,11 +1,15 @@
-# Home directory 
+# User
+user: k1ng
+
+# Home directory
 my_home: "{{ lookup('env', 'HOME') }}"
+
 
 # SSH
 ssh_dest_dir: "{{ lookup('env', 'HOME') }}/.ssh"
-ssh_files: 
+ssh_files:
   - id_rsa
-ssh_known_hosts: 
+ssh_known_hosts:
   - github.com
 ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
 
@@ -13,7 +17,7 @@ ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
 golang_install: true
 golang_version: "1.20.5"
 
-# Neovim 
+# Neovim
 nvim_version: "0.9.1"
 nvim_install_dest: "/usr/local"
 
@@ -22,7 +26,7 @@ docker_compose_version: "2.6.1"
 
 # NodeJS
 node_nvm_version: "0.39.3"
-node_versions: 
+node_versions:
   - 18.4.0
   - 16.15.1
 
@@ -35,12 +39,12 @@ node_global_packages:
 
 tmux_version: "3.3a"
 
-# gcloud 
+# gcloud
 gcloud_extras:
   - kubectl
   - google-cloud-sdk-gke-gcloud-auth-plugin
 
-nix_packages: 
+nix_packages:
   # - nixpkgs.gitAndTools.gitFull  # GPL v2
   # - nixpkgs.git-lfs  # MIT
   # - nixpkgs.gitAndTools.hub  # github hub, MIT
@@ -60,3 +64,6 @@ nix_packages:
   # - nixpkgs.toilet  # command-line ascii art generator
   - nixpkgs.alacritty
   - nixpkgs.fd
+
+
+  # vim: filetype=yaml.ansible

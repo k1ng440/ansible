@@ -3,14 +3,80 @@
     - install
     - docker
   block:
-    - name: Create ~/.local/bin
-      file:
-        path: "{{ my_home }}/.local/bin"
-        state: directory
-        mode: 0775
-
-    - name: Download docker-compose standalone
+    - name: Add Docker GPG key
+      become: true
       get_url:
-        url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-x86_64"
-        dest: "{{ my_home }}/.local/bin/docker-compose"
-        mode: 0700
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker-keyring.asc
+        mode: '0644'
+
+    - name: Add docker repo
+      become: true
+      apt_repository:
+        filename: example-repo
+        repo: 'deb [signed-by=/etc/apt/keyrings/docker-keyring.asc] https://download.docker.com/linux/ubuntu jammy stable'
+        state: present
+
+    - name: Install docker
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: latest
+        update_cache: true
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Ensure group "docker" exists
+      become: true
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: "Adding user to docker group: {{ user }}"
+      become: true
+      ansible.builtin.user:
+        name: "{{ user }}"
+        groups: docker
+        append: true
+        state: present
+
+    - name: "Set ACL for group to /var/run/docker.sock"
+      become: true
+      ansible.posix.acl:
+        path: "/var/run/docker.sock"
+        etype: group
+        entity: docker
+        permissions: rwx
+        state: present
+
+    - name: "Set ACL for user to /var/run/docker.sock"
+      become: true
+      ansible.posix.acl:
+        path: "/var/run/docker.sock"
+        etype: user
+        entity: "{{ user }}"
+        permissions: rwx
+        state: present
+
+    - name: Obtain the ACL for a specific file
+      ansible.posix.acl:
+        path: "/var/run/docker.sock"
+      register: acl_info
+
+    - name: Install docker-compose
+      become: true
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+    - name: Start docker
+      become: true
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+  # vim: filetype=yaml.ansible:

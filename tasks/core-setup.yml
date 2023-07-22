@@ -14,7 +14,7 @@
       apt:
         name: ["lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
 
-    - name: Install System Packages 3 
+    - name: Install System Packages 3
       become: true
       apt:
         name: ["git", "curl", "htop", "lsof", "ccache", "ninja-build", "python3-pip", "moreutils", "clangd", "dnsutils", "nano"]
@@ -27,4 +27,4 @@
     - name: Install System Packages 5
       become: true
       apt:
-        name: ["shellcheck", "libfontconfig1-dev"]
+        name: ["shellcheck", "libfontconfig1-dev", "entr"]
